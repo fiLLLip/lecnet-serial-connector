@@ -28,28 +28,32 @@ def to_command(obj):
         # print('Input: ' + input)
         # print(obj[input])
         vals = []
-        for output in obj[input]:
+        for output in range(1, 24+1):
             # print('Output: ' + output + ', Volume: ' + str(obj[input][output]))
-            vals.append(str(obj[input][output]))
+            vals.append(str(obj[input][str(output)]))
         cmd += '{' + ','.join(vals) + '}'
         cmds.append(cmd)
     return cmds
 
+
+def handle_message(message):
+    obj = (json.loads(str(message.payload.decode("utf-8"))))
+    cmds = to_command(obj)
+    for cmd in cmds:
+        run_command(cmd)
 
 def on_message(client, userdata, message):
     print("message received ", str(message.payload.decode("utf-8")))
     print("message topic=", message.topic)
     print("message qos=", message.qos)
     print("message retain flag=", message.retain)
-    obj = (json.loads(str(message.payload.decode("utf-8"))))
-    cmds = to_command(obj)
-    for cmd in cmds:
-        run_command(cmd)
+    handle_message(message)
+    
 
 
 client = mqtt.Client()
 client.on_message = on_message
-client.connect('192.168.12.109')
+client.connect('192.168.12.58')
 client.subscribe('lecnet')
 
 run_command('serial?')
