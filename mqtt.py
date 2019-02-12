@@ -49,17 +49,19 @@ def on_message(client, userdata, message):
     print("message retain flag=", message.retain)
     handle_message(message)
     
-
+def on_connect(client, userdata, flags, rc):
+    client.subscribe('lecnet')
 
 client = mqtt.Client()
 client.on_message = on_message
 client.connect('192.168.12.58')
-client.subscribe('lecnet')
 
 run_command('serial?')
 for val in range(1, 16+1):
     cmd = 'xpmode(' + str(val) + ',*)='
     cmd += '{' + ','.join(['1'] * 24) + '}'
     run_command(cmd)
+
+run_command('ingn(*)={-5,-5,-5,-5,-5-,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5,-5}')
 
 client.loop_forever()
