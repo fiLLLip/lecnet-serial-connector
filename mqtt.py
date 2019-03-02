@@ -2,6 +2,8 @@ import paho.mqtt.client as mqtt
 import json
 from pylibftdi import Device, USB_PID_LIST, USB_VID_LIST
 
+from config import MQTT_HOST
+
 USB_VID_LIST.append(0x1321)
 USB_PID_LIST.append(0x1001)
 
@@ -55,7 +57,7 @@ def on_connect(client, userdata, flags, rc):
 client = mqtt.Client()
 client.on_connect = on_connect
 client.on_message = on_message
-client.connect('192.168.12.58')
+client.connect(MQTT_HOST)
 
 run_command('serial?')
 for val in range(1, 16+1):

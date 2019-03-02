@@ -1,3 +1,4 @@
+#!/usr/bin/env bash
 apt-get install libftdi-dev -y
 apt-get install python3-pip -y
 pip3 install paho-mqtt pylibftdi
